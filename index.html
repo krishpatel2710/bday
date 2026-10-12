@@ -1,0 +1,260 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Happy Birthday Papa ❤️</title>
+
+<style>
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  overflow-x: hidden;
+  text-align: center;
+  color: white;
+  font-family: Georgia, serif;
+  background: radial-gradient(ellipse at top, #39204f, #090817 70%);
+}
+
+#sky {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  pointer-events: none;
+}
+
+main {
+  position: relative;
+  z-index: 1;
+  max-width: 850px;
+  margin: auto;
+  padding: 25px 15px 45px;
+}
+
+.small {
+  color: #ffdc85;
+  letter-spacing: 3px;
+  font: 12px Arial, sans-serif;
+}
+
+h1 {
+  color: #ffdc85;
+  font-size: clamp(34px, 8vw, 70px);
+  text-shadow: 0 0 12px #ffb52e, 0 0 35px #ff8b27;
+  animation: glow 1.5s infinite alternate;
+}
+
+h2 {
+  font-size: clamp(32px, 7vw, 55px);
+  margin-top: -15px;
+}
+
+@keyframes glow {
+  to { transform: scale(1.04); }
+}
+
+.photo {
+  width: min(85%, 350px);
+  max-height: 430px;
+  object-fit: cover;
+  object-position: center 30%;
+  border: 5px solid #ffdc85;
+  border-radius: 20px;
+  box-shadow: 0 0 30px #ffbc4c;
+}
+
+.wish {
+  margin: 25px auto;
+  padding: 22px;
+  max-width: 650px;
+  border: 1px solid #ffdc85;
+  border-radius: 20px;
+  background: #ffffff10;
+  font-size: clamp(17px, 3vw, 22px);
+  line-height: 1.8;
+}
+
+.gold { color: #ffdc85; }
+
+.cake {
+  font-size: 90px;
+  animation: bounce 1.5s infinite alternate;
+}
+
+@keyframes bounce {
+  to { transform: translateY(-12px); }
+}
+
+button {
+  background: linear-gradient(120deg, #ffe69a, #e6a43a);
+  color: #241329;
+  border: none;
+  border-radius: 30px;
+  padding: 14px 22px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+#extra {
+  color: #ffdc85;
+  min-height: 30px;
+  font-size: 20px;
+}
+</style>
+</head>
+
+<body>
+<canvas id="sky"></canvas>
+
+<main>
+  <p class="small">A LITTLE SURPRISE MADE WITH LOVE</p>
+
+  <h1>HAPPY BIRTHDAY</h1>
+  <h2>PAPA ❤️</h2>
+
+  <p>✨ A special day for someone truly special ✨</p>
+
+  <img
+    class="photo"
+    src="papa.jpg"
+    alt="Birthday photo"
+    onerror="this.style.display='none';document.getElementById('missing').style.display='block'"
+  >
+
+  <p id="missing" style="display:none;color:#ffdc85">
+    Please keep papa.jpg in the same folder as index.html.
+  </p>
+
+  <div class="cake">🎂</div>
+
+  <section class="wish">
+    <strong class="gold">Happy Birthday, Papa! ❤️</strong>
+    <br><br>
+    May your life always be filled with happiness,
+    good health, peace and endless love.
+    Thank you for being a source of strength,
+    guidance and inspiration.
+    May every day bring you beautiful memories,
+    countless reasons to smile and all the happiness
+    your heart deserves.
+    <br><br>
+    <strong class="gold">Lots of love and warm wishes! ❤️</strong>
+  </section>
+
+  <button onclick="surprise()">Tap for a little more magic ✨</button>
+  <p id="extra"></p>
+
+  <p class="small">MADE WITH LOVE ❤️</p>
+</main>
+
+<script>
+const canvas = document.getElementById("sky");
+const ctx = canvas.getContext("2d");
+
+let W, H, particles = [], rockets = [];
+
+function resize() {
+  const d = window.devicePixelRatio || 1;
+  W = canvas.width = innerWidth * d;
+  H = canvas.height = innerHeight * d;
+  canvas.style.width = innerWidth + "px";
+  canvas.style.height = innerHeight + "px";
+}
+resize();
+window.addEventListener("resize", resize);
+
+function burst(x, y) {
+  for (let i = 0; i < 55; i++) {
+    const a = Math.random() * Math.PI * 2;
+    const s = (1 + Math.random() * 4) *
+              (window.devicePixelRatio || 1);
+
+    particles.push({
+      x, y,
+      vx: Math.cos(a) * s,
+      vy: Math.sin(a) * s,
+      life: 70,
+      hue: [40, 50, 320, 275, 0][Math.floor(Math.random() * 5)]
+    });
+  }
+}
+
+function launch() {
+  rockets.push({
+    x: Math.random() * W,
+    y: H,
+    vx: (Math.random() - 0.5) * 2,
+    vy: -(5 + Math.random() * 5) *
+        (window.devicePixelRatio || 1),
+    target: H * (0.15 + Math.random() * 0.35)
+  });
+}
+
+let frame = 0;
+
+function animate() {
+  ctx.clearRect(0, 0, W, H);
+  frame++;
+
+  if (frame % 38 === 0) launch();
+
+  for (let i = rockets.length - 1; i >= 0; i--) {
+    const r = rockets[i];
+    r.x += r.vx;
+    r.y += r.vy;
+    r.vy += 0.04;
+
+    ctx.fillStyle = "#ffe29b";
+    ctx.beginPath();
+    ctx.arc(r.x, r.y, 3, 0, Math.PI * 2);
+    ctx.fill();
+
+    if (r.y < r.target || r.vy > 0) {
+      burst(r.x, r.y);
+      rockets.splice(i, 1);
+    }
+  }
+
+  for (let i = particles.length - 1; i >= 0; i--) {
+    const p = particles[i];
+    p.x += p.vx;
+    p.y += p.vy;
+    p.vy += 0.025;
+    p.life--;
+
+    ctx.globalAlpha = Math.max(0, p.life / 70);
+    ctx.fillStyle = `hsl(${p.hue},100%,70%)`;
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, 2.5, 0, Math.PI * 2);
+    ctx.fill();
+
+    if (p.life <= 0) particles.splice(i, 1);
+  }
+
+  ctx.globalAlpha = 1;
+  requestAnimationFrame(animate);
+}
+
+function surprise() {
+  document.getElementById("extra").textContent =
+    "May your smile shine brighter every year! Happy Birthday, Papa! ❤️";
+
+  for (let i = 0; i < 6; i++) {
+    setTimeout(() => burst(
+      Math.random() * W,
+      H * (0.2 + Math.random() * 0.5)
+    ), i * 200);
+  }
+}
+
+animate();
+</script>
+</body>
+</html>
+
